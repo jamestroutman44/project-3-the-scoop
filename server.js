@@ -30,15 +30,17 @@ const routes = {
     'PUT': downvoteArticle
   },
   '/comments': {
-    'POST': updatComment
+    'POST': createComment
   },
   '/comments/:id': {
+    'PUT': updateComment,
+    'DELETE': deleteComment
   },
   '/comments/:id/upvote': {
-  'PUT': upvoteArticle
+    'PUT': upvoteComment
   },
   '/comments/:id/downvote': {
-  'PUT': downvoteArticle
+    'PUT': downvoteComment
   }
 };
 
@@ -251,6 +253,53 @@ function downvote(item, username) {
     item.downvotedBy.push(username);
   }
   return item;
+}
+
+function createComment(url, request) {
+  const requestCommment = request.body && request.body.comment;
+  const response = {};
+
+  if (requestComment && requestComment.body && requestComment.username && requestComment.articleId && database.users[requestComment.username]) {
+    const comment = {
+      id: database.nextCommentId++,
+      body: requestComment.body,
+      username: requestComment.username,
+      articleId: [],
+      upvotedBy: [],
+      downvotedBy: []
+    };
+
+    database.comments[comment.id] = comment;
+    database.users[comment.username].commentIds.push(comment.id);
+
+    response.body = {comment: comment};
+    response.status = 201;
+  } else {
+    response.status = 400;
+  }
+
+  return response;
+}
+
+function updateComment(url, request) {
+  const id = Number(url.split('/').filter(segment => segment)[1]);
+  const savedComment = database.comment[id];
+  const requestComment = request.body && request.body.comment;
+  const response = {};
+
+  if (!id || !requestComment) {
+    response.status = 400;
+  } else if (!savedComment) {
+    response.status = 404;
+  } else {
+    savedComment.title = requestComment.title || savedComment.title;
+    savedComment.url = requestComment.url || savedComment.url;
+
+    response.body = {comment: savedComment};
+    response.status = 200;
+  }
+
+  return response;
 }
 
 // Write all code above this line.
