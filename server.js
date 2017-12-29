@@ -293,8 +293,7 @@ function updateComment(url, request) {
     response.status = 404;
   } else {
     savedComment.comment = requestComment.comment || savedComment.comment;
-    savedComment.url = requestComment.url || savedComment.url;
-
+    
     response.body = {comment: savedComment};
     response.status = 200;
   }
