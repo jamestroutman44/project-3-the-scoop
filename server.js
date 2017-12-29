@@ -283,7 +283,7 @@ function createComment(url, request) {
 
 function updateComment(url, request) {
   const id = Number(url.split('/').filter(segment => segment)[1]);
-  const savedComment = database.comment[id];
+  const savedComment = database.comments[id];
   const requestComment = request.body && request.body.comment;
   const response = {};
 
@@ -292,7 +292,7 @@ function updateComment(url, request) {
   } else if (!savedComment) {
     response.status = 404;
   } else {
-    savedComment.title = requestComment.title || savedComment.title;
+    savedComment.comment = requestComment.comment || savedComment.comment;
     savedComment.url = requestComment.url || savedComment.url;
 
     response.body = {comment: savedComment};
