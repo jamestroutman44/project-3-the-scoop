@@ -292,12 +292,11 @@ function updateComment(url, request) {
   } else if (!savedComment) {
     response.status = 404;
   } else {
-    savedComment.comment = requestComment.comment || savedComment.comment;
+    savedComment.body = requestComment.body || savedComment.body;
 
     response.body = {comment: savedComment};
     response.status = 200;
   }
-
   return response;
 }
 
