@@ -307,12 +307,13 @@ function deleteComment(url, request) {
 
   if (savedComment) {
     const userCommentIds = database.users[savedComment.username].commentIds;
+        database.comments[id] = null;
         const userArticleIds = database.articles[id].commentIds;
         userCommentIds.splice(userCommentIds.indexOf(id), 1);
         userArticleIds.splice(userArticleIds.indexOf(id), 1);
     response.status = 204;
   } else {
-    response.status = 400;
+    response.status = 404;
   }
 
   return response;
