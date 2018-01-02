@@ -306,15 +306,10 @@ function deleteComment(url, request) {
   const response = {};
 
   if (savedComment) {
-    database.comments[id] = null;
-    savedComment.commentIds.forEach(commentId => {
-      const comment = database.comments[commentId];
-      database.comments[commentId] = null;
-      const userCommentIds = database.users[comment.username].commentIds;
-      userCommentIds.splice(userCommentIds.indexOf(id), 1);
-    });
     const userCommentIds = database.users[savedComment.username].commentIds;
-    userCommentIds.splice(userCommentIds.indexOf(id), 1);
+        const userArticleIds = database.articles[id].commentIds;
+        userCommentIds.splice(userCommentIds.indexOf(id), 1);
+        userArticleIds.splice(userArticleIds.indexOf(id), 1);
     response.status = 204;
   } else {
     response.status = 400;
